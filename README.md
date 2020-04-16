@@ -4,7 +4,7 @@
 
 
 # News
- This project is under construction(much more functionalities to be added), but you can use the avialable fucntions. 
+ This project is under construction(much more functionalities to be added), but you can use the available fucntions. 
 
 
 
@@ -63,11 +63,11 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
     
  ## For loss function
     from Semantic_Segmentation.Losses import focal_loss
-    fl = focal_loss.los(y_true,y_pred,class_weights,pixel_weights)
+    fl = focal_loss.loss(y_true,y_pred,class_weights,pixel_weights)
     ''' Now you canuse this loss function '''
     
  ## For metrics
-    from Semantic_Segmentation import metrics
+    from Semantic_Segmentation import Metrics
     f1 = Metrics.f1score(y_true,y_pred,average,weights)
     ''' this returns the f1 score , the descriptions for parameters will be shown once you tyoe the class name'''
     
