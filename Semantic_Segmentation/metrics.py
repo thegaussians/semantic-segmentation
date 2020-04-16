@@ -4,7 +4,7 @@ import tensorflow as tf
 
 
 
-class metrics:
+class Metrics:
 
     __weighted_method = lambda self,x,y,string,w: (K.sum(x)/K.sum(y)) if string=='inter' else (K.sum(w*x)/K.sum(w*y))
     __avg_method = lambda self,x,y,string,w: K.mean(x/y) if string=='intra' else self.__weighted_method(x,y,string,w)
