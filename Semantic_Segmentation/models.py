@@ -111,8 +111,8 @@ class FCN16(FCN32):
     """ FCN16 architecture, it uses one skip connection and upsamples the image by the scale of 16.
 
         Usage :
-            FCN32 = Semantic_Segmentation.models.FCN16(input_shape,no_classes,base_model_name,pretrained_weights,regularizer)
-            model = FCN16.build()
+            fcn = Semantic_Segmentation.models.FCN16(input_shape,no_classes,base_model_name,pretrained_weights,regularizer)
+            model = fcn.build()
 
         # Arguments
             input_shape : size of the input image ,in tuple.
@@ -161,8 +161,8 @@ class FCN8(FCN32):
     """ FCN8 architecture, it uses two skip connections and upsamples the image by the scale of 8, preserves most of the information.
 
         Usage :
-            FCN32 = Semantic_Segmentation.models.FCN16(input_shape,no_classes,base_model_name,pretrained_weights,regularizer)
-            model = FCN16.build()
+            fcn = Semantic_Segmentation.models.FCN16(input_shape,no_classes,base_model_name,pretrained_weights,regularizer)
+            model = fcn.build()
 
         # Arguments
             input_shape : size of the input image ,in tuple.
