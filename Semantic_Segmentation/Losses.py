@@ -38,7 +38,7 @@ class focal_loss:
         fl = -( self.p_weights(self.pixel_weights) * (self.c_weights(self.class_weights) * 0.25 * K.pow(1.-y_pred,self.gamma) * (y_true * K.log(y_pred))) )
         fl = K.sum(fl,axis=(1,2,3))
         fl = K.mean(fl, axis=0)
-        return fl/100
+        return fl/100           ##since the loss is sum over the spatial dimensions it's scale will be high, thus we scale down by 100 to prevent higher gradients
 
 
 
@@ -72,7 +72,8 @@ class cross_entropy(focal_loss):
         ce = -( super().p_weights(self.pixel_weights) * (super().c_weights(self.class_weights) * (y_true * K.log(y_pred))) )
         ce = K.sum(ce,axis=(1,2,3))
         ce = K.mean(ce,axis=0)
-        return ce/100
+        return ce/100               ##since the loss is sum over the spatial dimensions it's scale will be high, thus we scale down by 100 to prevent higher gradients
+
 
 
 
