@@ -78,5 +78,7 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
 This project is dependent on - Keras, Tensorflow, Numpy. If you dont meet the requirements execute the following commands,
 
 For tensorflow --> pip install --upgrade tensorflow
+
 For Keras      --> pip install --upgrade keras
+
 For numpy      --> pip install --upgrade numpy
