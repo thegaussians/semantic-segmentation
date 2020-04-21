@@ -2,10 +2,10 @@
 
 
 
-
 # News
  This project is under construction(much more functionalities to be added), but you can use the available fucntions. 
-
+ 
+ * New - The Unet model is added and now available to use.
 
 
 
@@ -33,6 +33,8 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
  
  * FCN8 - Similar to FCN16 architecture, it uses 2 skip connections to get much finer outputs and after skip connections it upsamples by    scale of 8 hence FCN8. Available - FCN8-vgg16, FCN8-vgg19,FCN8-resnet50
  
+ * UNET - Uses small filters( 3*3 throught) to extract low-level features and results much finer outputs, they are generally applied on higher dimensional images (Eg-medical imaging,satekite images) in a patch-wise manner where each patch is being segmented. 
+ 
  
  ## Loss Functions  
  
@@ -49,6 +51,7 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
  Intersection over Union, accuracy, recall, precision, f1score
  
  All the above mentioned metrics comes with class weights to calculate weighted average scores among the classes for imbalanced datasets.
+ 
  
  
  
@@ -72,6 +75,7 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
     ''' this returns the f1 score , the descriptions for parameters will be shown once you tyoe the class name'''
     
     
+  
   
 # Requirements
 
