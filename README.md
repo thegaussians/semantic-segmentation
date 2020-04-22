@@ -5,8 +5,9 @@
 # News
  This project is under construction(much more functionalities to be added), but you can use the available fucntions. 
  
- * New - The Unet model is added and now available to use.
-
+ * New - 
+  The Unet model is added and now available to use.
+  Altered code architecture for optimised memory and better understanding.
 
 
 # Description
