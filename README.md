@@ -61,7 +61,7 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
  
  ## For building the model
     from Semantic_Segmentation import models                               ---> import the module
-    fcn = models.FCN.fcn32(input_shape,n_classes,'vgg19',regularizer=None)     ---> initiate your requirements
+    fcn = models.FCN.fcn32(input_shape,n_classes,'vgg19',regularizer=None,summary=True)     ---> initiate your requirements
     model = fcn.build()                                                     ---> executes building process and returns the architecture
     
  ## For loss function
