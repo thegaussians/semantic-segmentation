@@ -14,7 +14,7 @@ class UNET:
         """ Unet architecture
 
                Usage :
-                   unet = Semantic_Segmentation.models.UNET.unet(input_shape,no_classes,regularizer)
+                   unet = Semantic_Segmentation.models.UNET.unet(input_shape,no_classes,regularizer,summary)
                    model = unet.build()
 
                # Arguments
@@ -23,18 +23,17 @@ class UNET:
                                dtype --> int
                    regularizer : the regularizing value, it uses L2 regularizers on the kernel/filters.
                                dtype --> float   default -->None
+                   summary : If True prints the model summary
+                                default --> True
            """
-
-        ## use build to execute the architecture building process,it returns the required model
-        
-        #build = lambda self: self.model
+        build = lambda self: self.__architecture()
         weight_decay = lambda self, x: None if x == None else l2(x)
 
-        def __init__(self,input_shape,n_classes,regularizer=None):
+        def __init__(self,input_shape,n_classes,regularizer=None,summary=True):
             self.input_shape = input_shape
             self.n_classes = n_classes
             self.regularizer = regularizer
-            self.model = self.__architecture()
+            self.summary = summary
 
 
         def __architecture(self):
@@ -83,14 +82,10 @@ class UNET:
             op = Activation('softmax',name='softmax')(conv9)
 
             model = Model(input=input, output=op,name='Unet')
+            if self.summary: print(model.summary())
             return model
 
 
-        def build(self):
-
-            """ Invokes the model building process """
-            self.model.summary()
-            return self.model
 
 
 
@@ -106,7 +101,7 @@ class FCN:
         """ FCN32 architecture, it doesn't use any skip connections and upsamples the image by the scale of 32.
 
             Usage :
-                FCN32 = Semantic_Segmentation.models.FCN.fcn32(input_shape,no_classes,base_model_name,pretrained_weights,regularizer)
+                FCN32 = Semantic_Segmentation.models.FCN.fcn32(input_shape,no_classes,base_model_name,pretrained_weights,regularizer,summary)
                 model = FCN32.build()
 
             # Arguments
@@ -119,16 +114,19 @@ class FCN:
                             dtype --> string  default --> 'imagenet'
                 regularizer : the regularizing value, it uses L2 regularizers on the kernel/filters.
                             dtype --> float   default -->None
+                summary : If True prints the model summary
+                                default --> True
         """
         weight_decay = lambda self,x: l2(x) if type(x)==int else None
+        build = lambda self: self.__decoder(self.encoder())
 
-
-        def __init__(self,input_shape, n_classes,base_model='vgg16',weight_path='imagenet',regularizer = None):
+        def __init__(self,input_shape,n_classes,base_model='vgg16',weight_path='imagenet',regularizer = None,summary=True):
             self.base_model = base_model
             self.input_shape = input_shape
             self.n_classes = n_classes
             self.weightpath = weight_path
             self.regularizer = regularizer
+            self.summary = summary
 
 
         def encoder(self):
@@ -170,6 +168,7 @@ class FCN:
             output = Activation('softmax',name='softmax')(layer_decoder)
 
             model = Model(model_en.input,output,name='FCN32-'+self.base_model)
+            if self.summary: print(model.summary())
             return model
 
 
@@ -187,17 +186,6 @@ class FCN:
 
 
 
-        def build(self):
-
-            """ Invokes the building process
-
-                # Returns
-                    model : the compelete model architecture, both encoder and decoder combined
-            """
-            encoder_model = self.encoder()
-            model = self.__decoder(encoder_model)
-            model.summary()
-            return model
 
 
 
@@ -206,7 +194,7 @@ class FCN:
         """ FCN16 architecture, it uses one skip connection and upsamples the image by the scale of 16.
 
             Usage :
-                FCN16 = Semantic_Segmentation.models.FCN.fcn16(input_shape,no_classes,base_model_name,pretrained_weights,regularizer)
+                FCN16 = Semantic_Segmentation.models.FCN.fcn16(input_shape,no_classes,base_model_name,pretrained_weights,regularizer,summary)
                 model = FCN16.build()
 
             # Arguments
@@ -219,10 +207,14 @@ class FCN:
                             dtype --> string  default --> 'imagenet'
                 regularizer : the regularizing value, it uses L2 regularizers on the kernel/filters.
                             dtype --> float   default -->None
+                summary : If True prints the model summary
+                                default --> True
         """
 
         ## NOTE : It wraps the properties of FCN32, same arguments and encoder part but it uses diff decoder function
         ##since the decoder includes skip connection.
+        build = lambda self: self.__decoder(super().encoder())
+
         def __decoder(self,model_en):
 
             skip,_ = super().skip_connections(model_en)
@@ -235,20 +227,10 @@ class FCN:
             output = Activation('softmax',name='softmax')(layer_decoder)
 
             model = Model(model_en.input, output,name='FCN16-'+self.base_model)
+            if self.summary: print(model.summary())
             return model
 
 
-        def build(self):
-
-            """ Invokes the building process
-
-                # Returns
-                    model : the compelete model architecture, both encoder and decoder combined
-            """
-            encoder_model = super().encoder()
-            model = self.__decoder(encoder_model)
-            model.summary()
-            return model
 
 
     class fcn8(fcn32):
@@ -256,7 +238,7 @@ class FCN:
         """ FCN8 architecture, it uses two skip connections and upsamples the image by the scale of 8, preserves most of the information.
 
             Usage :
-                FCN8 = Semantic_Segmentation.models.FCN.fcn8(input_shape,no_classes,base_model_name,pretrained_weights,regularizer)
+                FCN8 = Semantic_Segmentation.models.FCN.fcn8(input_shape,no_classes,base_model_name,pretrained_weights,regularizer,summary)
                 model = FCN8.build()
 
             # Arguments
@@ -269,10 +251,14 @@ class FCN:
                             dtype --> string  default --> 'imagenet'
                 regularizer : the regularizing value, it uses L2 regularizers on the kernel/filters.
                             dtype --> float   default -->None
+                summary : If True prints the model summary
+                                default --> True
         """
 
         ## NOTE : It wraps the properties of FCN32, same arguments and encoder part but it uses diff decoder function
         ##since the decoder includes 2 skip connections.
+
+        build = lambda self: self.__decoder(super().encoder())
 
         def __decoder(self,model_en):
 
@@ -286,21 +272,12 @@ class FCN:
             layer_decoder = Add(name='skip2')([layer_decoder, skip_2])
             layer_decoder = Conv2DTranspose(self.n_classes, (16, 16), strides=(8, 8), padding='same',
                                             kernel_regularizer=super().weight_decay(self.regularizer), name='deconv3')(layer_decoder)
-
             output = Activation('softmax',name='softmax')(layer_decoder)
+
             model = Model(model_en.input,output,name='FCN8-'+self.base_model)
+            if self.summary: print(model.summary())
             return model
 
 
-        def build(self):
 
-            """ Invokes the building process
-
-                # Returns
-                    model : the compelete model architecture, both encoder and decoder combined
-            """
-            encoder_model = super().encoder()
-            model = self.__decoder(encoder_model)
-            model.summary()
-            return model
 
