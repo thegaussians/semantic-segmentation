@@ -5,7 +5,8 @@
 # News
  This project is under construction(much more functionalities to be added), but you can use the available fucntions. I always welcome and highly appreciate contributions and suggestions from the user. Feel free to contact me at --> pratoshk11@gmail.com 
  
- * New - 
+ 
+## Updates - 
  
   Fixed an error regarding pixel_weights and now it works fine.  (4/24)    
   
