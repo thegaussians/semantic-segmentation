@@ -8,13 +8,13 @@
  
 ## Updates - 
  
-  Fixed an error regarding pixel_weights and now it works fine.  (4/24)    
+ (4/24) --> Fixed an error regarding pixel_weights and now it works fine.      
   
-  A new metric 'Dice Coefficient' has been added, it measures the overlap score b/w images  DC = (2*A^B)/A U B.  (4/24)
+ (4/24) --> A new metric 'Dice Coefficient' has been added, it measures the overlap score b/w images  DC = (2*A^B)/A U B. 
   
-  Altered code architecture for optimised memory and better understanding. (4/22)
+ (4/22) --> Altered code architecture for optimised memory and better understanding. 
   
-  The Unet model is added and now available to use.  (4/21)
+ (4/21) --> The Unet model is added and now available to use.  
 
 
 
