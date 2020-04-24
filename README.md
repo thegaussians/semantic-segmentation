@@ -3,13 +3,18 @@
 
 
 # News
- This project is under construction(much more functionalities to be added), but you can use the available fucntions. 
+ This project is under construction(much more functionalities to be added), but you can use the available fucntions. I always welcome and highly appreciate contributions and suggestions from the user. Feel free to contact me at --> pratoshk11@gmail.com 
  
  * New - 
  
-  The Unet model is added and now available to use.
+  Fixed an error regarding pixel_weights and now it works fine.  (4/24)    
   
-  Altered code architecture for optimised memory and better understanding.
+  A new metric 'Dice Coefficient' has been added, it measures the overlap score b/w images  DC = (2*A^B)/A U B.  (4/24)
+  
+  Altered code architecture for optimised memory and better understanding. (4/22)
+  
+  The Unet model is added and now available to use.  (4/21)
+
 
 
 # Description
@@ -46,12 +51,12 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
  All the above loss functions comes with class weights to prevent class imbalance and region weights(pixel weights) to concentrate on
  certain parts of the image.
  
- NOTE - The user has to provide the weights
+ NOTE - The user has to provide the weights matching the dimension
  
  
  ## Metrics
  
- Intersection over Union, accuracy, recall, precision, f1score
+ Intersection over Union, accuracy, recall, precision, f1score, Dice Coefficient
  
  All the above mentioned metrics comes with class weights to calculate weighted average scores among the classes for imbalanced datasets.
  
