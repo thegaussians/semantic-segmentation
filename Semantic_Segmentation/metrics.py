@@ -1,6 +1,6 @@
 from keras.backend import tensorflow_backend as K
 import tensorflow as tf
-
+from .Losses import focal_loss
 
 
 
@@ -107,3 +107,23 @@ class Metrics:
         precision = self.precision(y_true,y_pred,average,weights)
         recall = self.recall(y_true,y_pred,average,weights)
         return ((2*precision*recall)/(precision+recall))
+
+
+
+    def dice_coeffiecient(self,y_true,y_pred,average='inter',weights=None):
+        """ Computes the dice score over each given class and returns the overall score.
+
+                # Arguments
+                    y_true : target value
+                    y_pred : predicted class value
+                    average : 'inter' --> computes the dice score overall  'intra' --> computes the score for each calss and computes the average
+                                    'weighted' --> computes the weighted average , useful for imabalanced class.
+                    weights :  only if average is specified 'weighted', weights for the respective classes.
+                # Returns
+                    dice score
+                """
+
+        y_pred = focal_loss.clipping(y_pred)
+        intersection = 2 * K.sum((y_true * y_pred),axis=(0,1,2))
+        union = K.sum( (y_true*y_true) + (y_pred*y_pred),axis=(0,1,2))
+        return self.__avg_method(intersection,union,average,weights)
