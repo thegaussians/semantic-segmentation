@@ -13,7 +13,7 @@ class focal_loss:
             pixel_weights : weights for each pixels in order to segment certain part of the image clearly.
                             dtype --> array   default --> None
     """
-    c_weights = lambda self,x: 0.25 if x==None else x
+    c_weights = lambda self,x: 1 if x==None else x
     p_weights = lambda self,x: 1 if x==None else x
     clipping = lambda self,x: K.clip(x, K.epsilon(), 1.-K.epsilon())
 
@@ -22,7 +22,6 @@ class focal_loss:
         self.class_weights = class_weights
         self.gamma = gamma
         self.pixel_weights = pixel_weights
-
 
     def loss(self,y_true,y_pred):
 
@@ -35,10 +34,10 @@ class focal_loss:
                 fl : mean focal loss for the given batch
          """
         y_pred = self.clipping(y_pred)
-        fl = -( self.p_weights(self.pixel_weights) * (self.c_weights(self.class_weights) * K.pow(1.-y_pred,self.gamma) * (y_true * K.log(y_pred))) )
-        fl = K.sum(fl,axis=(1,2,3))
+        fl = -(K.sum((self.c_weights(self.class_weights) * K.pow(1.-y_pred,self.gamma) * (y_true * K.log(y_pred))),axis=-1))
+        fl = K.sum((self.p_weights(self.pixel_weights) * fl),axis=(1,2))
         fl = K.mean(fl, axis=0)
-        return fl/100           ##since the loss is sum over the spatial dimensions it's scale will be high, thus we scale down by 100 to prevent higher gradients
+        return fl/100
 
 
 
@@ -69,11 +68,10 @@ class cross_entropy(focal_loss):
                 ce : mean cross-entropy for the given batch
         """
         y_pred = super().clipping(y_pred)
-        ce = -( super().p_weights(self.pixel_weights) * (super().c_weights(self.class_weights) * (y_true * K.log(y_pred))) )
-        ce = K.sum(ce,axis=(1,2,3))
+        ce = -(K.sum((super().c_weights(self.class_weights) * (y_true * K.log(y_pred))),axis=-1))
+        ce = K.sum((super().p_weights(self.pixel_weights) * ce),axis=(1,2))
         ce = K.mean(ce,axis=0)
-        return ce/100               ##since the loss is sum over the spatial dimensions it's scale will be high, thus we scale down by 100 to prevent higher gradients
-
+        return ce/100
 
 
 
@@ -102,8 +100,10 @@ class dice_loss(focal_loss):
                 dl : dice loss for the given batch
         """
         y_pred = super().clipping(y_pred)
-        intersection = K.sum((y_true * y_pred),axis=(0,1,2,3))
-        union = K.sum((y_true*y_true) + (y_pred*y_pred),axis=(0,1,2,3))
+        intersection = K.sum((super().c_weights(self.class_weights) * y_true * y_pred),axis=-1)
+        intersection = K.sum((super().p_weights(self.pixel_weights) * intersection),axis=(0,1,2))
+        union = K.sum( (super().c_weights(self.class_weights)(y_true*y_true) + (y_pred*y_pred) ),axis=-1)
+        union = K.sum((super().p_weights(self.pixel_weights) * union),axis=(0,1,2))
         dl = 1. - ((2*intersection)/union)
         return dl
 
