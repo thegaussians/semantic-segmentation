@@ -13,7 +13,7 @@ class focal_loss:
             pixel_weights : weights for each pixels in order to segment certain part of the image clearly.
                             dtype --> array   default --> None
     """
-    c_weights = lambda self,x: 1 if x==None else x
+    c_weights = lambda self,x: 0.25 if x==None else x
     p_weights = lambda self,x: 1 if x==None else x
     clipping = lambda self,x: K.clip(x, K.epsilon(), 1.-K.epsilon())
 
@@ -35,7 +35,7 @@ class focal_loss:
                 fl : mean focal loss for the given batch
          """
         y_pred = self.clipping(y_pred)
-        fl = -( self.p_weights(self.pixel_weights) * (self.c_weights(self.class_weights) * 0.25 * K.pow(1.-y_pred,self.gamma) * (y_true * K.log(y_pred))) )
+        fl = -( self.p_weights(self.pixel_weights) * (self.c_weights(self.class_weights) * K.pow(1.-y_pred,self.gamma) * (y_true * K.log(y_pred))) )
         fl = K.sum(fl,axis=(1,2,3))
         fl = K.mean(fl, axis=0)
         return fl/100           ##since the loss is sum over the spatial dimensions it's scale will be high, thus we scale down by 100 to prevent higher gradients
