@@ -99,7 +99,7 @@ class dice_loss(focal_loss):
                 y_true : true class values
                 y_pred : predicted class values from the model
             # Returns
-                dl : mean dice loss for the given batch
+                dl : dice loss for the given batch
         """
         y_pred = super().clipping(y_pred)
         intersection = K.sum((y_true * y_pred),axis=(0,1,2,3))
