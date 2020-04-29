@@ -84,7 +84,8 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
     ''' this returns the f1 score , the descriptions for parameters will be shown once you tyoe the class name'''
     
     
-  
+# Note  
+     The current version cannot be used for binary class, only multi-class
   
 # Requirements
 
