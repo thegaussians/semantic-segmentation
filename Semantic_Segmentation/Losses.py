@@ -102,7 +102,7 @@ class dice_loss(focal_loss):
         y_pred = super().clipping(y_pred)
         intersection = K.sum((super().c_weights(self.class_weights) * y_true * y_pred),axis=-1)
         intersection = K.sum((super().p_weights(self.pixel_weights) * intersection),axis=(0,1,2))
-        union = K.sum( (super().c_weights(self.class_weights)(y_true*y_true) + (y_pred*y_pred) ),axis=-1)
+        union = K.sum( (super().c_weights(self.class_weights)*((y_true*y_true) + (y_pred*y_pred)) ),axis=-1)
         union = K.sum((super().p_weights(self.pixel_weights) * union),axis=(0,1,2))
         dl = 1. - ((2*intersection)/union)
         return dl
