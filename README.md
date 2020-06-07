@@ -7,6 +7,8 @@
  
  
 ## Updates - 
+
+ (6/07) --> There was some bugs in the previous version of this package, I fixed it compeletely now its working fine, my apologies to the cloners.
  
  (6/07) --> Added a new model - Deep residual Unet, added the functionality to handle segmented data.
 
