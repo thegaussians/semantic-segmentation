@@ -8,13 +8,12 @@
  
 ## Updates - 
  
- (4/24) --> Fixed an error regarding pixel_weights and now it works fine.      
+ (6/07) --> Added a new model - Deep residual Unet, added the functionality to handle segmented data.
+
+ (4/24) --> Fixed a bug regarding pixel_weights and now it works fine.      
   
  (4/24) --> A new metric 'Dice Coefficient' has been added, it measures the overlap score b/w images  DC = (2*A^B)/A U B. 
   
- (4/22) --> Altered code architecture for optimised memory and better understanding. 
-  
- (4/21) --> The Unet model is added and now available to use.  
 
 
 
@@ -42,7 +41,10 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
  
  * FCN8 - Similar to FCN16 architecture, it uses 2 skip connections to get much finer outputs and after skip connections it upsamples by    scale of 8 hence FCN8. Available - FCN8-vgg16, FCN8-vgg19,FCN8-resnet50
  
- * UNET - Uses small filters( 3*3 throught) to extract low-level features and results much finer outputs, they are generally applied on higher dimensional images (Eg-medical imaging,satekite images) in a patch-wise manner where each patch is being segmented. 
+ * UNET - Uses small filters( 3*3 throught) to extract low-level features and results much finer outputs, since they are using multiple skip connections across layers.
+ 
+ * ResUnet - This is state-of-the-art network for segmentation(if hyperparameters are tuned properly), its combination of unet and residual networks which makes it further powerful.
+ 
  
  
  ## Loss Functions  
@@ -76,16 +78,26 @@ This repository serves as a Semantic Segmentation package. The motive is to ease
  ## For loss function
     from Semantic_Segmentation.Losses import focal_loss
     fl = focal_loss.loss(y_true,y_pred,class_weights,pixel_weights)
-    ''' Now you canuse this loss function '''
+    ''' Now you can use this loss function '''
     
  ## For metrics
     from Semantic_Segmentation import Metrics
     f1 = Metrics.f1score(y_true,y_pred,average,weights)
     ''' this returns the f1 score , the descriptions for parameters will be shown once you tyoe the class name'''
     
+ ## For converting data
+    # To onehots
+        cd = Semantic_Segmentation.convert_data(n_classes,data_y,color_map)
+        data = cd.to_onehot
     
+    # To segmented labels(RGB values)
+        data = cd.to_segmentation(predicted_data)    
+        
+           
+           
 # Note  
      The current version cannot be used for binary class, only multi-class
+  
   
 # Requirements
 
