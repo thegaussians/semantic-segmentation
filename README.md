@@ -110,3 +110,8 @@ For tensorflow --> pip install --upgrade tensorflow
 For Keras      --> pip install --upgrade keras
 
 For numpy      --> pip install --upgrade numpy
+
+
+# Credits
+
+The deep residual Unet code was inspired from nikhilroxtomar's https://github.com/nikhilroxtomar/Deep-Residual-Unet repo 
