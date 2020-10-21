@@ -151,75 +151,128 @@ class UNET:
         def __architecture(self):
             input = Input(self.input_shape)
 
-            conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+            conv1 = Conv2D(64, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(input)
-            conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv1)
             batchnorm1 = self.batchnorm(self.BatchNorm)(conv1)
-            pool1 = MaxPooling2D(pool_size=(2, 2))(batchnorm1)
+            activation1 = Activation('relu')(batchnorm1)
 
-            conv2 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+            conv1 = Conv2D(64, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation1)
+            batchnorm1 = self.batchnorm(self.BatchNorm)(conv1)
+            activation1 = Activation('relu')(batchnorm1)
+
+            pool1 = MaxPooling2D(pool_size=(2, 2))(activation1)
+
+
+            conv2 = Conv2D(128, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(pool1)
-            conv2 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv2)
             batchnorm2 = self.batchnorm(self.BatchNorm)(conv2)
-            pool2 = MaxPooling2D(pool_size=(2, 2))(batchnorm2)
+            activation2 = Activation('relu')(batchnorm2)
 
-            conv3 = Conv2D(256, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+            conv2 = Conv2D(128, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation2)
+            batchnorm2 = self.batchnorm(self.BatchNorm)(conv2)
+            activation2 = Activation('relu')(batchnorm2)
+
+            pool2 = MaxPooling2D(pool_size=(2, 2))(activation2)
+
+
+            conv3 = Conv2D(256, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(pool2)
-            conv3 = Conv2D(256, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv3)
             batchnorm3 = self.batchnorm(self.BatchNorm)(conv3)
-            pool3 = MaxPooling2D(pool_size=(2, 2))(batchnorm3)
+            activation3 = Activation('relu')(batchnorm3)
 
-            conv4 = Conv2D(512, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+            conv3 = Conv2D(256, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation3)
+            batchnorm3 = self.batchnorm(self.BatchNorm)(conv3)
+            activation3 = Activation('relu')(batchnorm3)
+
+            pool3 = MaxPooling2D(pool_size=(2, 2))(activation3)
+
+
+            conv4 = Conv2D(512, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(pool3)
-            conv4 = Conv2D(512, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv4)
             batchnorm4 = self.batchnorm(self.BatchNorm)(conv4)
-            pool4 = MaxPooling2D(pool_size=(2, 2))(batchnorm4)
+            activation4 = Activation('relu')(batchnorm4)
 
-            conv5 = Conv2D(1024, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+            conv4 = Conv2D(512, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation4)
+            batchnorm4 = self.batchnorm(self.BatchNorm)(conv4)
+            activation4 = Activation('relu')(batchnorm4)
+
+            pool4 = MaxPooling2D(pool_size=(2, 2))(activation4)
+
+
+            conv5 = Conv2D(1024, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(pool4)
-            conv5 = Conv2D(1024, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv5)
             batchnorm5 = self.batchnorm(self.BatchNorm)(conv5)
+            activation5 = Activation('relu')(batchnorm5)
+            
+            conv5 = Conv2D(1024, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation5)
+            batchnorm5 = self.batchnorm(self.BatchNorm)(conv5)
+            activation5 = Activation('relu')(batchnorm5)
+
             up5 = Conv2DTranspose(512, 4, strides=(2, 2), padding='same',
-                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_5')(batchnorm5)
+                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_5')(activation5)
 
-            merge6 = concatenate([batchnorm4, up5], axis=3)
-            conv6 = Conv2D(512, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+
+            merge6 = concatenate([activation4, up5], axis=3)
+            conv6 = Conv2D(512, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(merge6)
-            conv6 = Conv2D(512, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv6)
             batchnorm6 = self.batchnorm(self.BatchNorm)(conv6)
+            activation6 = Activation('relu')(batchnorm6)
+
+            conv6 = Conv2D(512, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation6)
+            batchnorm6 = self.batchnorm(self.BatchNorm)(conv6)
+            activation6 = Activation('relu')(batchnorm6)
+
             up6 = Conv2DTranspose(256, 4, strides=(2, 2), padding='same',
-                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_6')(batchnorm6)
+                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_6')(activation6)
 
-            merge7 = concatenate([batchnorm3, up6], axis=3)
-            conv7 = Conv2D(256, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+
+            merge7 = concatenate([activation3, up6], axis=3)
+            conv7 = Conv2D(256, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(merge7)
-            conv7 = Conv2D(256, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv7)
             batchnorm7 = self.batchnorm(self.BatchNorm)(conv7)
+            activation7 = Activation('relu')(batchnorm7)
+
+            conv7 = Conv2D(256, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation7)
+            batchnorm7 = self.batchnorm(self.BatchNorm)(conv7)
+            activation7 = Activation('relu')(batchnorm7)
+
             up7 = Conv2DTranspose(128, 4, strides=(2, 2), padding='same',
-                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_7')(batchnorm7)
+                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_7')(activation7)
 
-            merge8 = concatenate([batchnorm2, up7], axis=3)
-            conv8 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal')(merge8)
-            conv8 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv8)
+
+            merge8 = concatenate([activation2, up7], axis=3)
+            conv8 = Conv2D(128, 3, padding='same', kernel_initializer='he_normal')(merge8)
             batchnorm8 = self.batchnorm(self.BatchNorm)(conv8)
-            up8 = Conv2DTranspose(64, 4, strides=(2, 2), padding='same',
-                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_8')(batchnorm8)
+            activation8 = Activation('relu')(batchnorm8)
 
-            merge9 = concatenate([batchnorm1, up8], axis=3)
-            conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal',
+            conv8 = Conv2D(128, 3, padding='same', kernel_initializer='he_normal')(activation8)
+            batchnorm8 = self.batchnorm(self.BatchNorm)(conv8)
+            activation8 = Activation('relu')(batchnorm8)
+
+            up8 = Conv2DTranspose(64, 4, strides=(2, 2), padding='same',
+                                  kernel_regularizer=self.weight_decay(self.regularizer), name='upsample_8')(activation8)
+
+
+            merge9 = concatenate([activation1, up8], axis=3)
+            conv9 = Conv2D(64, 3, padding='same', kernel_initializer='he_normal',
                            kernel_regularizer=self.weight_decay(self.regularizer))(merge9)
-            conv9 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(conv9)
             batchnorm9 = self.batchnorm(self.BatchNorm)(conv9)
-            conv9 = Conv2D(self.n_classes, 1, activation='relu', padding='same', kernel_initializer='he_normal',
-                           kernel_regularizer=self.weight_decay(self.regularizer))(batchnorm9)
+            activation9 = Activation('relu')(batchnorm9)
+
+            conv9 = Conv2D(64, 3, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation9)
+            batchnorm9 = self.batchnorm(self.BatchNorm)(conv9)
+            activation9 = Activation('relu')(batchnorm9)
+
+            conv9 = Conv2D(self.n_classes, 1, padding='same', kernel_initializer='he_normal',
+                           kernel_regularizer=self.weight_decay(self.regularizer))(activation9)
             op = Activation('softmax', name='softmax')(conv9)
 
             model = Model(input=input, output=op, name='Unet')
